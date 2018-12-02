@@ -1,12 +1,12 @@
 module Main where
 
+import qualified Data.List as L
+import qualified Data.Map.Strict as Map
+import           Data.Set (Set)
+import qualified Data.Set as Set
 import           Data.Text.Lazy (Text)
 import qualified Data.Text.Lazy as T
 import qualified Data.Text.Lazy.IO as TIO
-import qualified Data.List as L
-import qualified Data.Map.Strict as Map
-import Data.Set (Set)
-import qualified Data.Set as Set
 import           System.Environment (getArgs)
 
 main :: IO ()
