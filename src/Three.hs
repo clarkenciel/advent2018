@@ -23,8 +23,12 @@ import           System.Exit (exitFailure)
 main :: IO ()
 main = do
   fname <- head <$> getArgs
-  partOne fname
-  partTwo fname
+  withClaims fname partOne
+  withClaims fname partTwo
+
+withClaims fname f = do
+  claims <- parseClaims . T.lines <$> TIO.readFile fname
+  either (const exitFailure) (print . f) claims
 
 parseClaims = mapM parseClaim
 
@@ -60,9 +64,7 @@ instance Monoid Presences where
 
 {- PART ONE -}
 
-partOne fname = do
-  claims <- parseClaims . T.lines <$> TIO.readFile fname
-  either (const exitFailure) (print . presenceArea . presenceOf (>1) . foldMap claimPresence) claims
+partOne = presenceArea . presenceOf (>1) . foldMap claimPresence
 
 presenceArea (S m) = Map.size m
 
@@ -76,9 +78,7 @@ claimPresence (Claim i (x :@ y) (w :* h)) = S . Map.fromList $ zipWith (,) point
 
 {- PART TWO -}
 
-partTwo fname = do
-  claims <- parseClaims . T.lines <$> TIO.readFile fname
-  either (const exitFailure) (print . head . Set.toList . freeClaim) claims
+partTwo = head . Set.toList . freeClaim
 
 freeClaim claims =
   let superPresence = foldMap claimPresence claims
